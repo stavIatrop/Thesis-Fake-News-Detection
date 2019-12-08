@@ -3,7 +3,7 @@ from gensim.parsing.porter import PorterStemmer
 import re, string
 
 
-X = pd.read_csv("shuffled_isot_dataset.csv", ",")
+X = pd.read_csv("isot_rev.csv", ",")
 X_text = X['text'].values
 X_title = X['title'].values
 
@@ -16,6 +16,7 @@ for i in range(len(X_text)):
     for word in words:
         pattern = re.compile('[\W_]+', re.UNICODE)  #Remove all non-alphanumeric characters
         word = pattern.sub('', word)
+        word = word.translate(str.maketrans('', '', string.punctuation))
         filtered_list.append(word)
         result = ' '.join(filtered_list)
 
@@ -26,6 +27,7 @@ for i in range(len(X_text)):
     for word in words:
         pattern = re.compile('[\W_]+', re.UNICODE)  #Remove all non-alphanumeric characters
         word = pattern.sub('', word)
+        word = word.translate(str.maketrans('', '', string.punctuation))
         filtered_list.append(word)
         result = ' '.join(filtered_list)
         

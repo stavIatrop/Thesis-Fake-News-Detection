@@ -1,6 +1,7 @@
 import pandas as pd
 import math
-df = pd.read_csv("test_isot.csv", ',', usecols=['label'])
+df = pd.read_csv("dev_isot.csv", ',', usecols=['label'])
 labels = df['label'].values
-true_per = sum(labels) / len(labels) * 100
-print("True articles: " + str(math.ceil(true_per)) + "% , Fake articles: " + str(math.floor(100 - true_per)) + "%")
+fake_per = sum(labels) / len(labels) * 100
+print("Articles: " + str(len(labels)))
+print("Fake articles: " + str((fake_per)) + "% , True articles: " + str((100 - fake_per)) + "%")
