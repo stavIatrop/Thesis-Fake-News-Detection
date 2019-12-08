@@ -13,7 +13,7 @@ X_train, X_rest, Y_train, Y_rest = train_test_split(
     X, y, test_size=0.4, random_state=42)
 
 X_dev, X_test, Y_dev, Y_test = train_test_split(
-    X_rest, Y_rest, test_size=0.2, random_state=42)
+    X_rest, Y_rest, test_size=0.5, random_state=42)
 
 
 for i in range(len(Y_train)):

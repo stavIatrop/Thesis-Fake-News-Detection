@@ -16,6 +16,7 @@ for i in range(len(X_text)):
     for word in words:
         pattern = re.compile('[^\u0000-\u007F]+', re.UNICODE)  #Remove all non-alphanumeric characters
         word = pattern.sub('', word)
+        word = word.translate(str.maketrans('', '', string.punctuation))
         filtered_list.append(word)
         result = ' '.join(filtered_list)
         
@@ -26,6 +27,6 @@ for i in range(len(X_text)):
 
 list1 = [['id', 'text', 'label']]
 for i in range(0, len(X_text)):
-      list1.append([X['id'][i], X_text[i], X['label'][i]])
+    list1.append([X['id'][i], X_text[i], X['label'][i]])
 df1 = pd.DataFrame(list1)
-df1.to_csv('stemmed_gossip.csv',sep=',',index = False ,header = False)
+df1.to_csv('stemmed_gossipcop.csv',sep=',',index = False ,header = False)
