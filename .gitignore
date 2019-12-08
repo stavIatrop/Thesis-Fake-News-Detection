@@ -1,3 +1,8 @@
-train_gossipcop.csv
-dev_gossipcop.csv
-test_gossipcop.csv
+FakeNewsNetDataset/train_gossipcop.csv
+FakeNewsNetDataset/dev_gossipcop.csv
+FakeNewsNetDataset/test_gossipcop.csv
+FakeNewsNetDataset/gossipcop_final.csv
+ISOTDataset/train_isot.csv
+ISOTDataset/test_isot.csv
+ISOTDataset/dev_isot.csv
+ISOTDataset/shuffled_isot_dataset.csv
