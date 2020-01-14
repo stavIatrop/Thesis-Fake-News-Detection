@@ -1,3 +1,6 @@
 FakeNewsNetDataset/gossipcop/*.csv
 FakeNewsNetDataset/politifact/*.csv
 ISOTDataset/*.csv
+FakeNewsNetDataset/gossipcop/*.png
+FakeNewsNetDataset/politifact/*.png
+FakeNewsNetDataset/gossipcop/*.pdf

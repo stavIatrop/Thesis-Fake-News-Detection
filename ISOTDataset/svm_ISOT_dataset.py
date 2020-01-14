@@ -16,12 +16,10 @@ import load_dataset
 
 X_train, Y_train = load_dataset.load_dataset("train_isot.csv", ",")
 X_dev, Y_dev = load_dataset.load_dataset("dev_isot.csv", ",")
+
 #Stopwords removal
 
 stopwords = set(ENGLISH_STOP_WORDS)
-stopwords.add("said")
-stopwords.add("say")
-stopwords.add("says")
 
 vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.49,  stop_words=stopwords)
 
