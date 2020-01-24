@@ -22,19 +22,11 @@ X_origin = pd.read_csv("train_politifact_vol2.csv", ",")
 Y = X_origin['label'].values
 X_origin = X_origin['text'].values
 print("Train set read.")
-#Load dev data
-# X_dev = pd.read_csv("dev_politifact_vol2.csv", ",")
-# Y_dev = X_dev['label'].values
-# X_dev = X_dev['text'].values
-# print("Dev set read.")
-
 
 stopwords = set(ENGLISH_STOP_WORDS)
 
 svm_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.56, stop_words=stopwords)
 X = svm_vectorizer.fit_transform(X_origin)
-#X_dev = vectorizer.transform(X_dev)
-
 print("Vectorized.")
 
 svd = TruncatedSVD(n_components=50, algorithm='arpack', random_state=42)
@@ -70,11 +62,8 @@ score_a /= 10
 print("SVM Accuracy: " + str(score_a))
 print("SVM F1 score: " + str(score_f))
 
-
-
 knn_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.53, stop_words=stopwords)
 X = knn_vectorizer.fit_transform(X_origin)
-#X_dev = vectorizer.transform(X_dev)
 
 print("Vectorized.")
 
