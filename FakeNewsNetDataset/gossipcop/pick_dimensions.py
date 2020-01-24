@@ -6,7 +6,7 @@ import os
 from sklearn.decomposition import TruncatedSVD
 import matplotlib.pyplot as plt
 
-X_train = pd.read_csv("train_gossipcop.csv", ",")
+X_train = pd.read_csv("train_gossipcop_vol2.csv", ",")
 Y_train = X_train['label'].values
 X_train = X_train['text'].values
 print("Train set read.")
@@ -21,12 +21,13 @@ nc_list = list()
 eigen = list()
 
 print(min(X_train.shape))
-for nc in range( min(X_train.shape) - 500, min(X_train.shape), 500):
+for nc in range( 1500, min(X_train.shape), 500):
     print(nc)
     nc_list.append(nc)
     svd = TruncatedSVD(n_components=nc, algorithm='arpack', random_state=42)
-    print("SVD performed.")
+    print("SVD prepared.")
     X_train2 = svd.fit_transform(X_train)
+    print("SVD performed.")
     variance.append(svd.explained_variance_ratio_.sum())
     eigen.append(svd.singular_values_.sum())
     plt.plot(range(svd.singular_values_.shape[0]), svd.singular_values_, color='r', label='Eigenvalues')

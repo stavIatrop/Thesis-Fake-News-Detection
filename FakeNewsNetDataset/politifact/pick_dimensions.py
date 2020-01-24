@@ -6,7 +6,7 @@ import os
 from sklearn.decomposition import TruncatedSVD
 import matplotlib.pyplot as plt
 
-X_train = pd.read_csv("train_politifact.csv", ",")
+X_train = pd.read_csv("train_politifact_vol2.csv", ",")
 Y_train = X_train['label'].values
 X_train = X_train['text'].values
 print("Train set read.")
@@ -21,7 +21,7 @@ nc_list = list()
 eigen = list()
 
 print(min(X_train.shape))
-for nc in range(50, min(X_train.shape), 50):
+for nc in range(50, 550, 50):
     print(nc)
     nc_list.append(nc)
     svd = TruncatedSVD(n_components=nc, algorithm='arpack', random_state=42)

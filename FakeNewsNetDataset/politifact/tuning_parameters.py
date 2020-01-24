@@ -17,28 +17,43 @@ from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 from sklearn.metrics import classification_report
 
-X_train = pd.read_csv("train_politifact.csv", ",", usecols=['text', 'label'])
+X_train = pd.read_csv("train_politifact_vol2.csv", ",", usecols=['text', 'label'])
 y_train = X_train['label'].values.flatten()
 X_train = X_train['text'].values.flatten()
 print("Read")
-X_dev = pd.read_csv("dev_politifact.csv", ",", usecols=['text', 'label'])
-y_dev = X_dev['label'].values.flatten()
-X_dev = X_dev['text'].values.flatten()
-print("Read")
+
 
 stopwords = set(ENGLISH_STOP_WORDS)
 
+# svm_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.56, stop_words=stopwords)
+# X_train = svm_vectorizer.fit_transform(X_train)
+# print("Vectorized.")
+
 #SVM parameters
-parameters = [  
-  {'C': [10, 100], 'kernel': ['linear']}
- ]
+# parameters = [  
+#   {'C': [10, 100], 'kernel': ['linear']}
+#  ]
+
+# knn_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.53, stop_words=stopwords)
+# X_train = knn_vectorizer.fit_transform(X_train)
+# print("Vectorized.")
+
 
 #KNN parameters
-# parameters = {
-#     'n_neighbors' : [3, 5, 11],
-#     'weights' : ['uniform', 'distance'],
-#     'metric' : ['euclidean', 'manhattan']
-# }
+# parameters = [
+#     {'weights' : ['uniform', 'distance'], 'metric' : ['euclidean', 'manhattan']},
+#        {'weights' : ['uniform', 'distance'],'metric' : ['minkowski'], 'p' : [4]},
+# ]
+
+# parameters = [
+#     {'n_neighbors': [8, 9 , 10 ] ,'weights' : ['uniform', 'distance'], 'metric' : ['euclidean', 'manhattan']},
+#        {'n_neighbors': [8, 9 , 10 ] , 'weights' : ['uniform', 'distance'],'metric' : ['minkowski'], 'p' : [5, 6]}
+# ]
+
+# LR_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.33, stop_words=stopwords)
+# X_train = LR_vectorizer.fit_transform(X_train)
+# print("Vectorized.")
+
 
 #Logistic Regression parameters
 # parameters = [
@@ -46,25 +61,40 @@ parameters = [
 #     {'C': [0.1, 1], 'penalty' : ['l1'], 'solver' : ['saga'] }   
 # ]
 
+# parameters = [
+#     {'C': [10, 100], 'penalty' : ['l1', 'l2'], 'solver' : ['liblinear']},
+#     {'C': [10, 100], 'penalty' : ['none', 'l2'], 'solver' : ['newton-cg', 'lbfgs', 'sag', 'saga'] }
+# ]
+
+# DT_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.77, stop_words=stopwords)
+# X_train = DT_vectorizer.fit_transform(X_train)
+# print("Vectorized.")
+
 #Decision Trees parameters
 # parameters = [
-#     { 'criterion' : ['entropy', 'gini'], 'min_samples_split' : range(120,200,25),'max_depth': range(1,3) }
+#     { 'criterion' : ['entropy', 'gini'], 'min_samples_split' : range(10,201, 20),'max_depth': range(1,4) }
 # ]
+
+# parameters = [
+#     { 'criterion' : ['entropy', 'gini'], 'min_samples_split' : range(300, 401, 200),'max_depth': [1, 2, 3, 4 ,5, 6] }
+# ]
+
+RF_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.32, stop_words=stopwords)
+X_train = RF_vectorizer.fit_transform(X_train)
+print("Vectorized.")
+
 
 #Random forest parameters
 # parameters = [
-#     { 'n_estimators' : range(10, 100, 10), 'criterion' : ['entropy', 'gini'], 'min_samples_split' : range(100,220,20),'max_depth': range(1,10,2) }    #410, 160 were the two values found on DecisionTreeClassifier tunning process
-# ]                                                                              #for accuracy and F1 score respectively 
+#     { 'n_estimators' : range(10, 101, 10), 'criterion' : ['entropy', 'gini'], 'min_samples_split' : range(150,231,10),'max_depth': [2] } 
+# ]                                                                              
 
+parameters = [
+    { 'n_estimators' : range(10, 101, 10), 'criterion' : ['entropy', 'gini'], 'min_samples_split' : range(10,101,10),'max_depth': [1, 3 ,6 ,10] } 
+]                                                                              
 
-vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.5, stop_words=stopwords)
-X_train = vectorizer.fit_transform(X_train)
-X_dev = vectorizer.transform(X_dev)
-print("Vectorized.")
-
-svd = TruncatedSVD(n_components=350,algorithm='arpack', random_state=42)
+svd = TruncatedSVD(n_components=50,algorithm='arpack', random_state=42)
 X_train = svd.fit_transform(X_train)
-X_dev = svd.transform(X_dev)
 print("SVD performed.")
 
 scores = ['f1']
@@ -74,13 +104,13 @@ for score in scores:
     print("# Tuning hyper-parameters for %s" % score)
     print()
 
-    clf = SVC()
+    #clf = SVC(random_state=42)
     #clf = KNeighborsClassifier()
-    #clf = LogisticRegression()
-    #clf = DecisionTreeClassifier()
-    #clf = RandomForestClassifier(random_state=42)
+    #clf = LogisticRegression(random_state=42)
+    #clf = DecisionTreeClassifier(random_state=42)
+    clf = RandomForestClassifier(random_state=42)
 
-    clf = GridSearchCV(clf, parameters, scoring='%s' % score, cv=5, return_train_score=True, verbose=100 )
+    clf = GridSearchCV(clf, parameters, scoring='%s' % score, cv=5, return_train_score=True,n_jobs=-1, verbose=1000 )
     
     clf.fit(X_train, y_train)
 
@@ -88,7 +118,7 @@ for score in scores:
     print()
     print(clf.best_params_)
     print()
-    print("Grid scores on development set:")
+    #print("Grid scores on development set:")
     # print()
     # means = clf.cv_results_['mean_test_score']
     # stds = clf.cv_results_['std_test_score']
@@ -111,4 +141,4 @@ df = pd.DataFrame()
 for key in dict_res:
     df[key] = list(dict_res[key])
 
-df.to_csv("gridsearch_svm2.csv", sep=',',index = False ,header = True)
+df.to_csv("gridsearch_RF4.csv", sep=',',index = False ,header = True)
