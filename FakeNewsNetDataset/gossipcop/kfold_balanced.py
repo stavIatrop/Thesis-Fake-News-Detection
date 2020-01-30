@@ -18,7 +18,7 @@ import seaborn as sns
 from sklearn.model_selection import KFold
 
 #Load train data
-X_origin = pd.read_csv("train_gossipcop_vol2.csv", ",")
+X_origin = pd.read_csv("train_gossipcop_balanced.csv", ",")
 Y = X_origin['label'].values
 X_origin = X_origin['text'].values
 print("Train set read.")
@@ -31,12 +31,12 @@ print("Train set read.")
 
 stopwords = set(ENGLISH_STOP_WORDS)
 
-svm_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.29, stop_words=stopwords)
+svm_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.37, stop_words=stopwords)
 X = svm_vectorizer.fit_transform(X_origin)
 
 print("Vectorized.")
 
-svd = TruncatedSVD(n_components=150, algorithm='arpack', random_state=42)
+svd = TruncatedSVD(n_components=200, algorithm='arpack', random_state=42)
 print("SVD prepared.")
 X = svd.fit_transform(X)
 
@@ -53,8 +53,8 @@ for train, test in kf.split(X):
     Y_train = Y[train]
     Y_test = Y[test]
  
-    clf = SVC(random_state=42) 
-    #clf = SVC(C=10, gamma='scale', kernel='rbf', random_state=42) 
+    #clf = SVC(random_state=42) 
+    clf = SVC(C=1, gamma=10, kernel='rbf', random_state=42) 
     
     clf.fit(X_train,Y_train)
     Y_predicted = clf.predict(X_test)
@@ -71,13 +71,13 @@ print("SVM F1 score: " + str(score_f))
 
 
 
-knn_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.56, stop_words=stopwords)
+knn_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.72, stop_words=stopwords)
 X = knn_vectorizer.fit_transform(X_origin)
 
 
 print("Vectorized.")
 
-svd = TruncatedSVD(n_components=150, algorithm='arpack', random_state=42)
+svd = TruncatedSVD(n_components=200, algorithm='arpack', random_state=42)
 print("SVD prepared.")
 X = svd.fit_transform(X)
 
@@ -93,8 +93,8 @@ for train, test in kf.split(X):
     Y_train = Y[train]
     Y_test = Y[test]
  
-    clf = KNeighborsClassifier() 
-    #clf = KNeighborsClassifier(n_neighbors=7, weights='distance', metric='euclidean')
+    #clf = KNeighborsClassifier() 
+    clf = KNeighborsClassifier(n_neighbors=5, weights='distance', metric='minkowski', p = 4 )
     clf.fit(X_train,Y_train)
     Y_predicted = clf.predict(X_test)
     
@@ -110,13 +110,13 @@ print("KNN F1 score: " + str(score_f))
 
 
 
-LR_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.65, stop_words=stopwords)
+LR_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.22, stop_words=stopwords)
 X = LR_vectorizer.fit_transform(X_origin)
 
 
 print("Vectorized.")
 
-svd = TruncatedSVD(n_components=150, algorithm='arpack', random_state=42)
+svd = TruncatedSVD(n_components=200, algorithm='arpack', random_state=42)
 print("SVD prepared.")
 X = svd.fit_transform(X)
 
@@ -148,16 +148,16 @@ print("LR Accuracy: " + str(score_a))
 print("LR F1 score: " + str(score_f))
 
 
-DT_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.25, stop_words=stopwords)
+DT_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.8, stop_words=stopwords)
 X = DT_vectorizer.fit_transform(X_origin)
 print("Vectorized.")
 
-svd = TruncatedSVD(n_components=150, algorithm='arpack', random_state=42)
+svd = TruncatedSVD(n_components=200, algorithm='arpack', random_state=42)
 print("SVD prepared.")
 X = svd.fit_transform(X)
 
 
-print("SVD finished.")
+# print("SVD finished.")
 
 score_f = 0
 score_a = 0
@@ -186,11 +186,11 @@ print("DT F1 score: " + str(score_f))
 
 
 
-RF_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.21, stop_words=stopwords)
+RF_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.4, stop_words=stopwords)
 X = RF_vectorizer.fit_transform(X_origin)
 print("Vectorized.")
 
-svd = TruncatedSVD(n_components=150, algorithm='arpack', random_state=42)
+svd = TruncatedSVD(n_components=200, algorithm='arpack', random_state=42)
 print("SVD prepared.")
 X = svd.fit_transform(X)
 
