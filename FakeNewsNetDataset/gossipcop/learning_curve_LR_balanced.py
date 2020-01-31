@@ -7,21 +7,21 @@ from sklearn.decomposition import TruncatedSVD
 import numpy as np
 import matplotlib.pyplot as plt
 
-X_train = pd.read_csv("train_gossipcop.csv", ",", usecols=['text', 'label'])
+X_train = pd.read_csv("train_gossipcop_balanced.csv", ",", usecols=['text', 'label'])
 y_train = X_train['label'].values.flatten()
 X_train = X_train['text'].values.flatten()
 print("Read")
 
 stopwords = set(ENGLISH_STOP_WORDS)
-vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.65, stop_words=stopwords)
+vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.25, stop_words=stopwords)
 X_train = vectorizer.fit_transform(X_train)
 print("Vectorized.")
 
-svd = TruncatedSVD(n_components=150,algorithm='arpack', random_state=42)
+svd = TruncatedSVD(n_components=200,algorithm='arpack', random_state=42)
 X_train = svd.fit_transform(X_train)
 print("SVD performed.")
 
-x = [0.1, 1, 10 , 100, 1000]
+x = [0.1, 1, 10 , 100, 1000, 1100, 1300, 1500]
 train_scores, valid_scores = validation_curve(LogisticRegression(random_state=42), X_train, y_train, "C", x ,   cv=3 , verbose=1000, n_jobs=-1, scoring='accuracy')
 
 train_scores = np.mean(train_scores, axis=1)
@@ -96,7 +96,7 @@ plt.clf()
 # plt.show()
 
 
-x = [0.1, 1, 10 , 100, 1000]
+x = [0.1, 1, 10 , 100, 1000, 1100, 1300, 1500]
 train_scores, valid_scores = validation_curve(LogisticRegression(random_state=42), X_train, y_train, "C", x ,   cv=3 , verbose=1000, n_jobs=-1, scoring='f1')
 
 train_scores = np.mean(train_scores, axis=1)

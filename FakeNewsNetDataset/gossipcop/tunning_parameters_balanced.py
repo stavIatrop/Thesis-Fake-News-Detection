@@ -42,27 +42,29 @@ stopwords = set(ENGLISH_STOP_WORDS)
   
 # ]
 
-knn_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.72, stop_words=stopwords)
-X_train = knn_vectorizer.fit_transform(X_train)
-print("Vectorized.")
+# knn_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.72, stop_words=stopwords)
+# X_train = knn_vectorizer.fit_transform(X_train)
+# print("Vectorized.")
 
 #KNN parameters
-parameters = [
-    {'n_neighbors' : [3, 5, 7], 'weights' : ['uniform', 'distance'], 'metric' : ['euclidean', 'manhattan']},
-    {'n_neighbors' : [3, 5, 7], 'weights' : ['uniform', 'distance'],'metric' : ['minkowski'], 'p':[3, 4] }
-]
+# parameters = [
+#     {'n_neighbors' : [3, 5, 7], 'weights' : ['uniform', 'distance'], 'metric' : ['euclidean', 'manhattan']},
+#     {'n_neighbors' : [3, 5, 7], 'weights' : ['uniform', 'distance'],'metric' : ['minkowski'], 'p':[3, 4] }
+# ]
 
-# LR_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.65, stop_words=stopwords)
+# LR_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.25, stop_words=stopwords)
 # X_train = LR_vectorizer.fit_transform(X_train)
 # print("Vectorized.")
 
 #Logistic Regression parameters
 # parameters = [
-#     {'C': [10, 100], 'penalty' : ['l2', 'l1'], 'solver' : ['liblinear'] }   
+#     {'C': [10, 100], 'penalty' : ['l2', 'l1'], 'solver' : ['liblinear', 'saga'] },
+#     {'C': [10, 100], 'penalty' : ['l2', 'none'], 'solver' : ['lbfgs'] }   
+ 
 # ]
 
 
-# DT_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.25, stop_words=stopwords)
+# DT_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.8, stop_words=stopwords)
 # X_train = DT_vectorizer.fit_transform(X_train)
 # print("Vectorized.")
 
@@ -73,22 +75,22 @@ parameters = [
 
 #2nd round of tuning
 # parameters = [
-#     { 'criterion' : ['entropy', 'gini'], 'min_samples_split' : range(400,491,10),'max_depth': range(3,8) }
+#     { 'criterion' : ['entropy', 'gini'], 'min_samples_split' : range(400,451,10),'max_depth': [4, 7, None] }
 # ]
 
 
-# RF_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.21, stop_words=stopwords)
-# X_train = RF_vectorizer.fit_transform(X_train)
-# print("Vectorized.")
+RF_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.4, stop_words=stopwords)
+X_train = RF_vectorizer.fit_transform(X_train)
+print("Vectorized.")
 
 #Random forest parameters
 # parameters = [
 #     { 'n_estimators' : range(10, 500, 10), 'min_samples_split': [410, 160] }    #410, 160 were the two values found on DecisionTreeClassifier tunning process
 # ]                                                                              #for accuracy and F1 score respectively 
 
-# parameters = [
-#     { 'criterion' : ['gini'],'max_depth': [13, 15, 19], 'n_estimators' : [180], 'min_samples_split': range(2, 53, 10 ) } 
-# ]     
+parameters = [
+    { 'criterion' : ['entropy','gini'],'max_depth': [17, 19, 20, 23, 25, 30], 'n_estimators' : [90, 100,190, 200, 290, 300], 'min_samples_split': range(5, 51, 5 ) } 
+]     
 
 # vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.5, stop_words=stopwords)
 # X_train = vectorizer.fit_transform(X_train)
@@ -107,11 +109,11 @@ for score in scores:
     print()
     
     #clf = SVC(random_state=42)
-    clf = KNeighborsClassifier()
+    #clf = KNeighborsClassifier()
     #clf = LogisticRegression(random_state=42, max_iter=1000)
     #clf = DecisionTreeClassifier(random_state=42)
-    #clf = RandomForestClassifier(random_state=42)
-    clf = GridSearchCV(clf, parameters, scoring='%s' % score, cv=5, return_train_score=True, verbose=1000, n_jobs=-1)
+    clf = RandomForestClassifier(random_state=42)
+    clf = GridSearchCV(clf, parameters, scoring='%s' % score, cv=5, return_train_score=True, verbose=10000, n_jobs=-1)
     
     clf.fit(X_train, y_train)
 
@@ -124,4 +126,4 @@ df = pd.DataFrame()
 for key in dict_res:
     df[key] = list(dict_res[key])
 
-df.to_csv("gridsearch_KNN_balanced.csv", sep=',',index = False ,header = True)
+df.to_csv("gridsearch_RF_balanced.csv", sep=',',index = False ,header = True)
