@@ -166,10 +166,10 @@ Y_class1_test_LR = Y_probas_test_LR[np.newaxis, :, 1].T
 Y_class1_test_DT = Y_probas_test_DT[np.newaxis, :, 1].T
 Y_class1_test_RF = Y_probas_test_RF[np.newaxis, :, 1].T
 
-X_meta_train = np.concatenate(( Y_class1_train_knn,  Y_class1_train_DT, Y_class1_train_RF), axis=1)  #concatenate horizontally, final shape (m, 5)
+X_meta_train = np.concatenate(( Y_class1_train_svm, Y_class1_train_knn, Y_class1_train_LR,  Y_class1_train_DT, Y_class1_train_RF), axis=1)  #concatenate horizontally, final shape (m, 5)
 Y_meta_train = Y_train
 
-X_meta_test = np.concatenate(( Y_class1_test_knn, Y_class1_test_DT, Y_class1_test_RF), axis=1)  #concatenate horizontally, final shape (n, 5)
+X_meta_test = np.concatenate(( Y_class1_test_svm, Y_class1_test_knn, Y_class1_test_LR, Y_class1_test_DT, Y_class1_test_RF), axis=1)  #concatenate horizontally, final shape (n, 5)
 Y_meta_test = Y_test
 
 meta_clf = LogisticRegression(random_state=42)
