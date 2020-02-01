@@ -16,6 +16,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 from sklearn.model_selection import KFold
+from sklearn.metrics import auc
+from sklearn.metrics import plot_roc_curve
+from numpy import interp
 
 #Load train data
 X_origin = pd.read_csv("train_gossipcop_balanced.csv", ",")
@@ -31,43 +34,77 @@ print("Train set read.")
 
 stopwords = set(ENGLISH_STOP_WORDS)
 
-# svm_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.37, stop_words=stopwords)
-# X = svm_vectorizer.fit_transform(X_origin)
+svm_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.37, stop_words=stopwords)
+X = svm_vectorizer.fit_transform(X_origin)
 
-# print("Vectorized.")
+print("Vectorized.")
 
-# svd = TruncatedSVD(n_components=200, algorithm='arpack', random_state=42)
-# print("SVD prepared.")
-# X = svd.fit_transform(X)
+svd = TruncatedSVD(n_components=200, algorithm='arpack', random_state=42)
+print("SVD prepared.")
+X = svd.fit_transform(X)
 
 
-# print("SVD finished.")
+print("SVD finished.")
+tprs = []
+aucs = []
+mean_fpr = np.linspace(0, 1, 100)
 
-# score_f = 0
-# score_a = 0
+fig, ax = plt.subplots()
+score_f = 0
+score_a = 0
 
-# kf = KFold(n_splits=5,random_state=42, shuffle=True)
-# for train, test in kf.split(X):
-#     X_train = X[train]
-#     X_test = X[test]
-#     Y_train = Y[train]
-#     Y_test = Y[test]
+kf = KFold(n_splits=5,random_state=42, shuffle=True)
+for i, (train, test) in enumerate(kf.split(X)):
+    X_train = X[train]
+    X_test = X[test]
+    Y_train = Y[train]
+    Y_test = Y[test]
  
-#     #clf = SVC(random_state=42) 
-#     clf = SVC(C=1, gamma=10, kernel='rbf', random_state=42) 
+    #clf = SVC(random_state=42) 
+    clf = SVC(C=1, gamma=10, kernel='rbf', random_state=42 ,probability=True) 
     
-#     clf.fit(X_train,Y_train)
-#     Y_predicted = clf.predict(X_test)
+    clf.fit(X_train,Y_train)
+    Y_predicted = clf.predict(X_test)
     
-#     score_f += f1_score(Y_test,Y_predicted)
-#     score_a += accuracy_score(Y_test,Y_predicted)
+    score_f += f1_score(Y_test,Y_predicted)
+    score_a += accuracy_score(Y_test,Y_predicted)
+
+    viz = plot_roc_curve(clf, X_test, Y_test,
+                         name='ROC fold {}'.format(i),
+                         alpha=0.3, lw=1, ax=ax)
+    interp_tpr = interp(mean_fpr, viz.fpr, viz.tpr)
+    interp_tpr[0] = 0.0
+    tprs.append(interp_tpr)
+    aucs.append(viz.roc_auc)
+
+ax.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r',
+        label='Chance', alpha=.8)
+
+mean_tpr = np.mean(tprs, axis=0)
+mean_tpr[-1] = 1.0
+mean_auc = auc(mean_fpr, mean_tpr)
+std_auc = np.std(aucs)
+ax.plot(mean_fpr, mean_tpr, color='b',
+        label=r'Mean ROC (AUC = %0.2f $\pm$ %0.2f)' % (mean_auc, std_auc),
+        lw=2, alpha=.8)
+
+std_tpr = np.std(tprs, axis=0)
+tprs_upper = np.minimum(mean_tpr + std_tpr, 1)
+tprs_lower = np.maximum(mean_tpr - std_tpr, 0)
+ax.fill_between(mean_fpr, tprs_lower, tprs_upper, color='grey', alpha=.2,
+                label=r'$\pm$ 1 std. dev.')
+
+ax.set(xlim=[-0.05, 1.05], ylim=[-0.05, 1.05],
+       title="Receiver operating characteristic - SVM")
+ax.legend(loc="lower right")
+plt.show()
 
 
-# score_f /= 5
-# score_a /= 5
+score_f /= 5
+score_a /= 5
 
-# print("SVM Accuracy: " + str(score_a))
-# print("SVM F1 score: " + str(score_f))
+print("SVM Accuracy: " + str(score_a))
+print("SVM F1 score: " + str(score_f))
 
 
 
