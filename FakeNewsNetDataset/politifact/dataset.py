@@ -4,13 +4,12 @@ from textblob import TextBlob
 import cufflinks as cf
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("testefa.csv", ',')
+df = pd.read_csv("cleaned_politifact.csv", ',')
 labels = df['label'].values
 fake_per = sum(labels) / len(labels) * 100
 print("Fake articles: " + str(sum(labels)))
 print("Articles: " + str(len(labels)))
 print("Fake articles: " + str((fake_per)) + "%, True articles: " + str((100 - fake_per)) + "%")
-
 
 
 df['polarity'] = df['text'].map(lambda text: TextBlob(text).sentiment.polarity)

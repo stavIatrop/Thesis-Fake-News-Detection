@@ -54,7 +54,7 @@ svm = SVC(C=10, gamma='scale', kernel='rbf', random_state=42, probability=True)
 print("Training LR...")
 
 
-LR = LogisticRegression(C=10, penalty='l2', solver='liblinear')
+LR = LogisticRegression(C=100, penalty='l1', solver='liblinear', max_iter=1000, random_state=42)
 
 # LR.fit(X_train, Y_train)
 # Y_predict_LR = LR.predict(X_test)
@@ -90,7 +90,7 @@ RF = RandomForestClassifier(criterion='gini', max_depth=None, min_samples_split=
 # perc_agree = (sum / len(Y_test)) * 100
 # print( " Classifiers agree at about: " +  str(perc_agree))
 
-VC = VotingClassifier(estimators=[('svm', svm), ('LR', LR), ('KNN', KNN), ('DT', DT), ('RF', RF)], voting='soft')
+VC = VotingClassifier(estimators=[('svm', svm), ('KNN', KNN), ('LR', LR), ('DT', DT), ('RF', RF)], voting='soft', weights=[2.75408065, 8.42029977, 0.43180211, 0.16912782, 4.43205492])
 VC = VC.fit(X_train, Y_train)
 print("Trained.")
 
@@ -98,18 +98,18 @@ Y_predict_test = VC._predict(X_test)
 print("test predicted.")
 
 Y_predict_test_final = VC.predict(X_test)
-# mislabel = 0
-# _all = len(Y_predict_test)
-# for i in range(len(Y_predict_test)):
+mislabel = 0
+_all = len(Y_predict_test)
+for i in range(len(Y_predict_test)):
 
     
-#     if Y_predict_test_final[i] != Y_test[i]:
-#         if Y_test[i] in Y_predict_test[i]:
-#             mislabel = mislabel + 1 
+    if Y_predict_test_final[i] != Y_test[i]:
+        if Y_test[i] in Y_predict_test[i]:
+            mislabel = mislabel + 1 
 
-# percentage = mislabel / _all
-# print("Percentage of mislabeled samples that one or more classifier had predicted right on test set:" + 
-#         str(percentage))
+percentage = mislabel / _all
+print("Percentage of mislabeled samples that one or more classifier had predicted right on test set:" + 
+        str(percentage))
 
 print("test accuracy: " + str(accuracy_score(Y_test, Y_predict_test_final)))
 print("test F1 score: " + str(f1_score(Y_test, Y_predict_test_final)))

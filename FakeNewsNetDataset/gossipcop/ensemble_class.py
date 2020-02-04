@@ -177,7 +177,7 @@ meta_clf.fit(X_meta_train, Y_meta_train)
 print("Meta-classifier trained.")
 
 Y_predict_meta = meta_clf.predict(X_meta_test)
-
+print(meta_clf.coef_)
 print("Test accuracy: " + str(accuracy_score(Y_meta_test, Y_predict_meta)))
 print("Test F1 score: " + str(f1_score(Y_meta_test, Y_predict_meta)))
 
