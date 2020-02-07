@@ -33,7 +33,7 @@ X = svm_vectorizer.fit_transform(X_origin)
 
 print("Vectorized.")
 
-svd = TruncatedSVD(n_components=1000, algorithm='arpack', random_state=42)
+svd = TruncatedSVD(n_components=500, algorithm='arpack', random_state=42)
 print("SVD prepared.")
 X = svd.fit_transform(X)
 
@@ -44,24 +44,24 @@ print("SVD finished.")
 # mean_fpr = np.linspace(0, 1, 100)
 
 # fig, ax = plt.subplots()
-# score_f = 0
-# score_a = 0
+score_f = 0
+score_a = 0
 
-# kf = KFold(n_splits=5,random_state=42, shuffle=True)
-# for i, (train, test) in enumerate(kf.split(X)):
-#     X_train = X[train]
-#     X_test = X[test]
-#     Y_train = Y[train]
-#     Y_test = Y[test]
+kf = KFold(n_splits=5,random_state=42, shuffle=True)
+for i, (train, test) in enumerate(kf.split(X)):
+    X_train = X[train]
+    X_test = X[test]
+    Y_train = Y[train]
+    Y_test = Y[test]
  
-#     clf = SVC(random_state=42) 
-#     #clf = SVC(C=10, gamma='scale', kernel='rbf', random_state=42, probability=True) 
+    clf = SVC(random_state=42) 
+    #clf = SVC(C=10, gamma='scale', kernel='rbf', random_state=42, probability=True) 
     
-#     clf.fit(X_train,Y_train)
-#     Y_predicted = clf.predict(X_test)
+    clf.fit(X_train,Y_train)
+    Y_predicted = clf.predict(X_test)
     
-#     score_f += f1_score(Y_test,Y_predicted)
-#     score_a += accuracy_score(Y_test,Y_predicted)
+    score_f += f1_score(Y_test,Y_predicted)
+    score_a += accuracy_score(Y_test,Y_predicted)
 
 #     viz = plot_roc_curve(clf, X_test, Y_test,
 #                          name='ROC fold {}'.format(i),
@@ -94,11 +94,11 @@ print("SVD finished.")
 # plt.show()
 
 
-# score_f /= 5
-# score_a /= 5
+score_f /= 5
+score_a /= 5
 
-# print("SVM Accuracy: " + str(score_a))
-# print("SVM F1 score: " + str(score_f))
+print("SVM Accuracy: " + str(score_a))
+print("SVM F1 score: " + str(score_f))
 
 
 
