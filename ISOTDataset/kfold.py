@@ -28,12 +28,12 @@ print("Train set read.")
 
 stopwords = set(ENGLISH_STOP_WORDS)
 
-svm_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.25, stop_words=stopwords)
+svm_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.73, stop_words=stopwords)
 X = svm_vectorizer.fit_transform(X_origin)
 
 print("Vectorized.")
 
-svd = TruncatedSVD(n_components=500, algorithm='arpack', random_state=42)
+svd = TruncatedSVD(n_components=200, algorithm='arpack', random_state=42)
 print("SVD prepared.")
 X = svd.fit_transform(X)
 
@@ -54,8 +54,8 @@ for i, (train, test) in enumerate(kf.split(X)):
     Y_train = Y[train]
     Y_test = Y[test]
  
-    clf = SVC(random_state=42) 
-    #clf = SVC(C=10, gamma='scale', kernel='rbf', random_state=42, probability=True) 
+    #clf = SVC(random_state=42) 
+    clf = SVC(C=10, gamma=10, kernel='rbf', random_state=42, probability=True) 
     
     clf.fit(X_train,Y_train)
     Y_predicted = clf.predict(X_test)
