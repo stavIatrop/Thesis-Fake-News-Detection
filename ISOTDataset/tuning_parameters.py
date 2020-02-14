@@ -24,15 +24,15 @@ print("Read")
 stopwords = set(ENGLISH_STOP_WORDS)
 
 
-svm_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.73, stop_words=stopwords)
-X_train = svm_vectorizer.fit_transform(X_train)
+vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.73, stop_words=stopwords)
+X_train = vectorizer.fit_transform(X_train)
 print("Vectorized.")
 
 #SVM parameters
-parameters = [  
-  {'C': [ 10], 'kernel': ['linear']},
-  {'C': [1, 10, 100], 'gamma': [10], 'kernel': ['rbf']},
- ]
+# parameters = [  
+#   {'C': [ 10], 'kernel': ['linear']},
+#   {'C': [1, 10, 100], 'gamma': [10], 'kernel': ['rbf']},
+#  ]
 
 
 
@@ -42,8 +42,8 @@ parameters = [
 
 #KNN parameters
 # parameters = [
-#     {'n_neighbors' : [3, 5, 7], 'weights' : ['uniform', 'distance'], 'metric' : ['euclidean', 'manhattan']},
-#     {'n_neighbors' : [3, 5, 7], 'weights' : ['uniform', 'distance'],'metric' : ['minkowski'], 'p':[3] }
+#     {'n_neighbors' : [2, 4],  'metric' : ['euclidean', 'manhattan']},
+#     {'n_neighbors' : [2, 4], 'metric' : ['minkowski'], 'p':[6] }
 # ]
 
 # LR_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.65, stop_words=stopwords)
@@ -52,8 +52,8 @@ parameters = [
 
 #Logistic Regression parameters
 # parameters = [
-#     {'C': [10, 100, 1000], 'penalty' : ['l2', 'l1'], 'solver' : ['liblinear', 'saga'] },
-#     {'C': [10, 100, 1000], 'penalty' : ['l2'], 'solver' : ['lbfgs'] }     
+#     {'C': [10, 100], 'penalty' : ['l2', 'l1'], 'solver' : [ 'saga'] },
+#     {'C': [10, 100], 'penalty' : ['l2'], 'solver' : ['lbfgs'] }     
 # ]
 
 # DT_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.25, stop_words=stopwords)
@@ -61,15 +61,9 @@ parameters = [
 # print("Vectorized.")
 
 #Decision Trees parameters
-# parameters = [
-#     { 'criterion' : ['entropy', 'gini'], 'min_samples_split' : range(10,500,50),'max_depth': range(1,20,2) }
-# ]
-
-#2nd round of tuning
-# parameters = [
-#     { 'criterion' : ['entropy', 'gini'], 'min_samples_split' : range(400,491,10),'max_depth': range(3,8) }
-# ]
-
+parameters = [
+    { 'criterion' : ['entropy', 'gini'], 'min_samples_split' : range(10,101,10),'max_depth': [10] }
+]
 
 # RF_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.21, stop_words=stopwords)
 # X_train = RF_vectorizer.fit_transform(X_train)
@@ -100,12 +94,12 @@ for score in scores:
     print("# Tuning hyper-parameters for %s" % score)
     print()
     
-    clf = SVC(random_state=42)
-    #clf = KNeighborsClassifier()
+    #clf = SVC(random_state=42)
+    #clf = KNeighborsClassifier(weights='distance')
     #clf = LogisticRegression(random_state=42, max_iter=1000)
-    #clf = DecisionTreeClassifier(random_state=42)
+    clf = DecisionTreeClassifier(random_state=42)
     #clf = RandomForestClassifier(random_state=42)
-    clf = GridSearchCV(clf, parameters, scoring='%s' % score, cv=5, return_train_score=True, verbose=1000, n_jobs=-1)
+    clf = GridSearchCV(clf, parameters, scoring='%s' % score, cv=5, return_train_score=True, verbose=10000, n_jobs=-1)
     
     clf.fit(X_train, y_train)
 
@@ -118,4 +112,4 @@ df = pd.DataFrame()
 for key in dict_res:
     df[key] = list(dict_res[key])
 
-df.to_csv("gridsearch_svm.csv", sep=',',index = False ,header = True)
+df.to_csv("gridsearch_DT.csv", sep=',',index = False ,header = True)
