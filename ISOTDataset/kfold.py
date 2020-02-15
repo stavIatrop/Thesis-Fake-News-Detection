@@ -190,30 +190,30 @@ print("SVD finished.")
 
 # print("SVD finished.")
 
-score_f = 0
-score_a = 0
+# score_f = 0
+# score_a = 0
 
-kf = KFold(n_splits=5,random_state=42, shuffle=True)
-for train, test in kf.split(X):
-    X_train = X[train]
-    X_test = X[test]
-    Y_train = Y[train]
-    Y_test = Y[test]
+# kf = KFold(n_splits=5,random_state=42, shuffle=True)
+# for train, test in kf.split(X):
+#     X_train = X[train]
+#     X_test = X[test]
+#     Y_train = Y[train]
+#     Y_test = Y[test]
  
-    #clf = DecisionTreeClassifier(random_state=42) 
-    clf = DecisionTreeClassifier(criterion='gini', max_depth=10, min_samples_split=10, random_state=42)
-    clf.fit(X_train,Y_train)
-    Y_predicted = clf.predict(X_test)
+#     #clf = DecisionTreeClassifier(random_state=42) 
+#     clf = DecisionTreeClassifier(criterion='gini', max_depth=10, min_samples_split=10, random_state=42)
+#     clf.fit(X_train,Y_train)
+#     Y_predicted = clf.predict(X_test)
     
-    score_f += f1_score(Y_test,Y_predicted)
-    score_a += accuracy_score(Y_test,Y_predicted)
+#     score_f += f1_score(Y_test,Y_predicted)
+#     score_a += accuracy_score(Y_test,Y_predicted)
 
 
-score_f /= 5
-score_a /= 5
+# score_f /= 5
+# score_a /= 5
 
-print("DT Accuracy: " + str(score_a))
-print("DT F1 score: " + str(score_f))
+# print("DT Accuracy: " + str(score_a))
+# print("DT F1 score: " + str(score_f))
 
 
 
@@ -238,8 +238,8 @@ for train, test in kf.split(X):
     Y_train = Y[train]
     Y_test = Y[test]
  
-    clf = RandomForestClassifier(random_state=42) 
-    #clf = RandomForestClassifier(criterion='gini', max_depth=None, min_samples_split=2, n_estimators=180, random_state=42) 
+    #clf = RandomForestClassifier(random_state=42) 
+    clf = RandomForestClassifier(criterion='entropy', max_depth=21, min_samples_split=6, n_estimators=350, random_state=42) 
     
     clf.fit(X_train,Y_train)
     Y_predicted = clf.predict(X_test)

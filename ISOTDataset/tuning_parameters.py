@@ -61,22 +61,20 @@ print("Vectorized.")
 # print("Vectorized.")
 
 #Decision Trees parameters
-parameters = [
-    { 'criterion' : ['entropy', 'gini'], 'min_samples_split' : range(10,101,10),'max_depth': [10] }
-]
+# parameters = [
+#     { 'criterion' : ['entropy', 'gini'], 'min_samples_split' : range(10,101,10),'max_depth': [10] }
+# ]
 
 # RF_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.21, stop_words=stopwords)
 # X_train = RF_vectorizer.fit_transform(X_train)
 # print("Vectorized.")
 
 #Random forest parameters
-# parameters = [
-#     { 'n_estimators' : range(10, 500, 10), 'min_samples_split': [410, 160] }    #410, 160 were the two values found on DecisionTreeClassifier tunning process
-# ]                                                                              #for accuracy and F1 score respectively 
+parameters = [
+    { 'n_estimators' : range(300, 501, 50), 'min_samples_split': range(2, 13), 'max_depth' : range(20, 24),  'criterion' : ['entropy', 'gini'] }   
+]                                                                             
 
-# parameters = [
-#     { 'criterion' : ['gini'],'max_depth': [13, 15, 19], 'n_estimators' : [180], 'min_samples_split': range(2, 53, 10 ) } 
-# ]     
+
 
 # vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.5, stop_words=stopwords)
 # X_train = vectorizer.fit_transform(X_train)
@@ -97,8 +95,8 @@ for score in scores:
     #clf = SVC(random_state=42)
     #clf = KNeighborsClassifier(weights='distance')
     #clf = LogisticRegression(random_state=42, max_iter=1000)
-    clf = DecisionTreeClassifier(random_state=42)
-    #clf = RandomForestClassifier(random_state=42)
+    #clf = DecisionTreeClassifier(random_state=42)
+    clf = RandomForestClassifier(random_state=42)
     clf = GridSearchCV(clf, parameters, scoring='%s' % score, cv=5, return_train_score=True, verbose=10000, n_jobs=-1)
     
     clf.fit(X_train, y_train)
@@ -112,4 +110,4 @@ df = pd.DataFrame()
 for key in dict_res:
     df[key] = list(dict_res[key])
 
-df.to_csv("gridsearch_DT.csv", sep=',',index = False ,header = True)
+df.to_csv("gridsearch_RF.csv", sep=',',index = False ,header = True)
