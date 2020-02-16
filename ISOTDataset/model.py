@@ -48,32 +48,32 @@ X_test = svd.transform(X_test)
 print("SVD finished.")
 
 #svm = SVC(random_state=42, probability=True)
-# svm = SVC(C=10, gamma=10, kernel='rbf', random_state=42, probability=True)
+svm = SVC(C=10, gamma=10, kernel='rbf', random_state=42, probability=True)
 
-# svm.fit(X_train, Y_train)
-# print("Trained.")
-# Y_predict_test = svm.predict(X_test)
-# print("Test predicted.")
+svm.fit(X_train, Y_train)
+print("Trained.")
+Y_predict_test = svm.predict(X_test)
+print("Test predicted.")
 
-# print("Test accuracy: " + str(accuracy_score(Y_test, Y_predict_test)))
-# print("Test F1 score: " + str(f1_score(Y_test, Y_predict_test)))
+print("Test accuracy: " + str(accuracy_score(Y_test, Y_predict_test)))
+print("Test F1 score: " + str(f1_score(Y_test, Y_predict_test)))
 
 
-# #Plot confusion matrix for the test set
-# cf_matrix = confusion_matrix(Y_test, Y_predict_test, labels=[0, 1])
-# htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
-# plt.title("SVM: Confusion Matrix of Test set")
-# plt.xlabel("Predicted Label")
-# plt.ylabel("True Label")
+#Plot confusion matrix for the test set
+cf_matrix = confusion_matrix(Y_test, Y_predict_test, labels=[0, 1])
+htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
+plt.title("SVM: Confusion Matrix of Test set")
+plt.xlabel("Predicted Label")
+plt.ylabel("True Label")
 
-# plt.savefig("after_conf_svm.png")
+plt.savefig("after_conf_svm.png")
 
-# plt.clf()
+plt.clf()
 
-# Y_probas = svm.predict_proba(X_test)
-# skplt.metrics.plot_precision_recall_curve(Y_test, Y_probas, title="SVM: Precision-Recall Curve" )
-# plt.savefig("after_prcurve_svm.png")
-# plt.clf()
+Y_probas = svm.predict_proba(X_test)
+skplt.metrics.plot_precision_recall_curve(Y_test, Y_probas, title="SVM: Precision-Recall Curve" )
+plt.savefig("after_prcurve_svm.png")
+plt.clf()
 
 
 # KNeighborsClassifier
