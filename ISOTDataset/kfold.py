@@ -44,24 +44,24 @@ print("SVD finished.")
 # mean_fpr = np.linspace(0, 1, 100)
 
 # fig, ax = plt.subplots()
-# score_f = 0
-# score_a = 0
+score_f = 0
+score_a = 0
 
-# kf = KFold(n_splits=5,random_state=42, shuffle=True)
-# for i, (train, test) in enumerate(kf.split(X)):
-#     X_train = X[train]
-#     X_test = X[test]
-#     Y_train = Y[train]
-#     Y_test = Y[test]
+kf = KFold(n_splits=5,random_state=42, shuffle=True)
+for i, (train, test) in enumerate(kf.split(X)):
+    X_train = X[train]
+    X_test = X[test]
+    Y_train = Y[train]
+    Y_test = Y[test]
  
-#     #clf = SVC(random_state=42) 
-#     clf = SVC(C=10, gamma=10, kernel='rbf', random_state=42, probability=True) 
+    #clf = SVC(random_state=42) 
+    clf = SVC(C=10, gamma=10, kernel='rbf', random_state=42, probability=True) 
     
-#     clf.fit(X_train,Y_train)
-#     Y_predicted = clf.predict(X_test)
+    clf.fit(X_train,Y_train)
+    Y_predicted = clf.predict(X_test)
     
-#     score_f += f1_score(Y_test,Y_predicted)
-#     score_a += accuracy_score(Y_test,Y_predicted)
+    score_f += f1_score(Y_test,Y_predicted)
+    score_a += accuracy_score(Y_test,Y_predicted)
 
 #     viz = plot_roc_curve(clf, X_test, Y_test,
 #                          name='ROC fold {}'.format(i),
@@ -94,139 +94,139 @@ print("SVD finished.")
 # plt.show()
 
 
-# score_f /= 5
-# score_a /= 5
+score_f /= 5
+score_a /= 5
 
-# print("SVM Accuracy: " + str(score_a))
-# print("SVM F1 score: " + str(score_f))
-
-
-
-# knn_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.56, stop_words=stopwords)
-# X = knn_vectorizer.fit_transform(X_origin)
+print("SVM Accuracy: " + str(score_a))
+print("SVM F1 score: " + str(score_f))
 
 
-# print("Vectorized.")
 
-# svd = TruncatedSVD(n_components=150, algorithm='arpack', random_state=42)
-# print("SVD prepared.")
-# X = svd.fit_transform(X)
+knn_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.56, stop_words=stopwords)
+X = knn_vectorizer.fit_transform(X_origin)
 
-# print("SVD finished.")
 
-# score_f = 0
-# score_a = 0
+print("Vectorized.")
 
-# kf = KFold(n_splits=5,random_state=42, shuffle=True)
-# for train, test in kf.split(X):
-#     X_train = X[train]
-#     X_test = X[test]
-#     Y_train = Y[train]
-#     Y_test = Y[test]
+svd = TruncatedSVD(n_components=150, algorithm='arpack', random_state=42)
+print("SVD prepared.")
+X = svd.fit_transform(X)
+
+print("SVD finished.")
+
+score_f = 0
+score_a = 0
+
+kf = KFold(n_splits=5,random_state=42, shuffle=True)
+for train, test in kf.split(X):
+    X_train = X[train]
+    X_test = X[test]
+    Y_train = Y[train]
+    Y_test = Y[test]
  
-#     #clf = KNeighborsClassifier() 
-#     clf = KNeighborsClassifier(n_neighbors = 4, weights='distance', metric='minkowski' ,p = 6)
-#     clf.fit(X_train,Y_train)
-#     Y_predicted = clf.predict(X_test)
+    #clf = KNeighborsClassifier() 
+    clf = KNeighborsClassifier(n_neighbors = 4, weights='distance', metric='minkowski' ,p = 6)
+    clf.fit(X_train,Y_train)
+    Y_predicted = clf.predict(X_test)
     
-#     score_f += f1_score(Y_test,Y_predicted)
-#     score_a += accuracy_score(Y_test,Y_predicted)
+    score_f += f1_score(Y_test,Y_predicted)
+    score_a += accuracy_score(Y_test,Y_predicted)
 
 
-# score_f /= 5
-# score_a /= 5
+score_f /= 5
+score_a /= 5
 
-# print("KNN Accuracy: " + str(score_a))
-# print("KNN F1 score: " + str(score_f))
-
-
-
-# LR_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.65, stop_words=stopwords)
-# X = LR_vectorizer.fit_transform(X_origin)
+print("KNN Accuracy: " + str(score_a))
+print("KNN F1 score: " + str(score_f))
 
 
-# print("Vectorized.")
 
-# svd = TruncatedSVD(n_components=150, algorithm='arpack', random_state=42)
-# print("SVD prepared.")
-# X = svd.fit_transform(X)
+LR_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.65, stop_words=stopwords)
+X = LR_vectorizer.fit_transform(X_origin)
 
-# print("SVD finished.")
 
-# score_f = 0
-# score_a = 0
+print("Vectorized.")
 
-# kf = KFold(n_splits=5,random_state=42, shuffle=True)
-# for train, test in kf.split(X):
-#     X_train = X[train]
-#     X_test = X[test]
-#     Y_train = Y[train]
-#     Y_test = Y[test]
+svd = TruncatedSVD(n_components=150, algorithm='arpack', random_state=42)
+print("SVD prepared.")
+X = svd.fit_transform(X)
+
+print("SVD finished.")
+
+score_f = 0
+score_a = 0
+
+kf = KFold(n_splits=5,random_state=42, shuffle=True)
+for train, test in kf.split(X):
+    X_train = X[train]
+    X_test = X[test]
+    Y_train = Y[train]
+    Y_test = Y[test]
  
-#     #clf = LogisticRegression(random_state=42) 
-#     clf = LogisticRegression(C = 10, penalty='l1', solver='saga', max_iter=1000, random_state=42)
-#     clf.fit(X_train,Y_train)
-#     Y_predicted = clf.predict(X_test)
+    #clf = LogisticRegression(random_state=42) 
+    clf = LogisticRegression(C = 10, penalty='l1', solver='saga', max_iter=1000, random_state=42)
+    clf.fit(X_train,Y_train)
+    Y_predicted = clf.predict(X_test)
     
-#     score_f += f1_score(Y_test,Y_predicted)
-#     score_a += accuracy_score(Y_test,Y_predicted)
+    score_f += f1_score(Y_test,Y_predicted)
+    score_a += accuracy_score(Y_test,Y_predicted)
 
 
-# score_f /= 5
-# score_a /= 5
+score_f /= 5
+score_a /= 5
 
-# print("LR Accuracy: " + str(score_a))
-# print("LR F1 score: " + str(score_f))
-
-
-# DT_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.25, stop_words=stopwords)
-# X = DT_vectorizer.fit_transform(X_origin)
-# print("Vectorized.")
-
-# svd = TruncatedSVD(n_components=150, algorithm='arpack', random_state=42)
-# print("SVD prepared.")
-# X = svd.fit_transform(X)
+print("LR Accuracy: " + str(score_a))
+print("LR F1 score: " + str(score_f))
 
 
-# print("SVD finished.")
+DT_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.25, stop_words=stopwords)
+X = DT_vectorizer.fit_transform(X_origin)
+print("Vectorized.")
 
-# score_f = 0
-# score_a = 0
+svd = TruncatedSVD(n_components=150, algorithm='arpack', random_state=42)
+print("SVD prepared.")
+X = svd.fit_transform(X)
 
-# kf = KFold(n_splits=5,random_state=42, shuffle=True)
-# for train, test in kf.split(X):
-#     X_train = X[train]
-#     X_test = X[test]
-#     Y_train = Y[train]
-#     Y_test = Y[test]
+
+print("SVD finished.")
+
+score_f = 0
+score_a = 0
+
+kf = KFold(n_splits=5,random_state=42, shuffle=True)
+for train, test in kf.split(X):
+    X_train = X[train]
+    X_test = X[test]
+    Y_train = Y[train]
+    Y_test = Y[test]
  
-#     #clf = DecisionTreeClassifier(random_state=42) 
-#     clf = DecisionTreeClassifier(criterion='gini', max_depth=10, min_samples_split=10, random_state=42)
-#     clf.fit(X_train,Y_train)
-#     Y_predicted = clf.predict(X_test)
+    #clf = DecisionTreeClassifier(random_state=42) 
+    clf = DecisionTreeClassifier(criterion='gini', max_depth=10, min_samples_split=10, random_state=42)
+    clf.fit(X_train,Y_train)
+    Y_predicted = clf.predict(X_test)
     
-#     score_f += f1_score(Y_test,Y_predicted)
-#     score_a += accuracy_score(Y_test,Y_predicted)
+    score_f += f1_score(Y_test,Y_predicted)
+    score_a += accuracy_score(Y_test,Y_predicted)
 
 
-# score_f /= 5
-# score_a /= 5
+score_f /= 5
+score_a /= 5
 
-# print("DT Accuracy: " + str(score_a))
-# print("DT F1 score: " + str(score_f))
-
-
-
-# RF_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.21, stop_words=stopwords)
-# X = RF_vectorizer.fit_transform(X_origin)
-# print("Vectorized.")
-
-# svd = TruncatedSVD(n_components=150, algorithm='arpack', random_state=42)
-# print("SVD prepared.")
-# X = svd.fit_transform(X)
+print("DT Accuracy: " + str(score_a))
+print("DT F1 score: " + str(score_f))
 
 
-# print("SVD finished.")
+
+RF_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.21, stop_words=stopwords)
+X = RF_vectorizer.fit_transform(X_origin)
+print("Vectorized.")
+
+svd = TruncatedSVD(n_components=150, algorithm='arpack', random_state=42)
+print("SVD prepared.")
+X = svd.fit_transform(X)
+
+
+print("SVD finished.")
 
 score_f = 0
 score_a = 0
