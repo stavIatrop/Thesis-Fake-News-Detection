@@ -46,7 +46,7 @@ X_test = svd.transform(X_test)
 print("SVD finished.")
 
 
-svm = SVC(C=10, kernel='linear', random_state=42)
+svm = SVC(C=10, kernel='linear', random_state=42, probability=True)
 
 svm.fit(X_train, Y_train)
 Y_predict_svm = svm.predict(X_test)
