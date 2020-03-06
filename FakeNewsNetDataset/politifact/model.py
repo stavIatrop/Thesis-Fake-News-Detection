@@ -59,14 +59,6 @@ print("Test accuracy: " + str(accuracy_score(Y_test, Y_predict_test)))
 print("Test F1 score: " + str(f1_score(Y_test, Y_predict_test)))
 
 #Plot confusion matrix for the test set
-# cf_matrix = confusion_matrix(Y_train, Y_predict_train, labels=[0, 1])
-# htmp_train = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
-# plt.title("Confusion Matrix of Train set")
-# plt.xlabel("Predicted Label")
-# plt.ylabel("True Label")
-# plt.show()
-# plt.clf()
-#Plot confusion matrix for the test set
 cf_matrix = confusion_matrix(Y_test, Y_predict_test, labels=[0, 1])
 htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
 plt.title("SVM: Confusion Matrix of Test set")
@@ -109,14 +101,6 @@ print("Test accuracy: " + str(accuracy_score(Y_test, Y_predict_test)))
 print("Test F1 score: " + str(f1_score(Y_test, Y_predict_test)))
 
 #Plot confusion matrix for the test set
-# cf_matrix = confusion_matrix(Y_train, Y_predict_train, labels=[0, 1])
-# htmp_train = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
-# plt.title("Confusion Matrix of Train set")
-# plt.xlabel("Predicted Label")
-# plt.ylabel("True Label")
-# plt.show()
-# plt.clf()
-#Plot confusion matrix for the test set
 cf_matrix = confusion_matrix(Y_test, Y_predict_test, labels=[0, 1])
 htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
 plt.title("KNN: Confusion Matrix of Test set")
@@ -157,14 +141,6 @@ print("Test predicted.")
 print("Test accuracy: " + str(accuracy_score(Y_test, Y_predict_test)))
 print("Test F1 score: " + str(f1_score(Y_test, Y_predict_test)))
 
-#Plot confusion matrix for the test set
-# cf_matrix = confusion_matrix(Y_train, Y_predict_train, labels=[0, 1])
-# htmp_train = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
-# plt.title("Confusion Matrix of Train set")
-# plt.xlabel("Predicted Label")
-# plt.ylabel("True Label")
-# plt.show()
-# plt.clf()
 #Plot confusion matrix for the test set
 cf_matrix = confusion_matrix(Y_test, Y_predict_test, labels=[0, 1])
 htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
@@ -208,14 +184,6 @@ print("Test accuracy: " + str(accuracy_score(Y_test, Y_predict_test)))
 print("Test F1 score: " + str(f1_score(Y_test, Y_predict_test)))
 
 #Plot confusion matrix for the test set
-# cf_matrix = confusion_matrix(Y_train, Y_predict_train, labels=[0, 1])
-# htmp_train = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
-# plt.title("Confusion Matrix of Train set")
-# plt.xlabel("Predicted Label")
-# plt.ylabel("True Label")
-# plt.show()
-# plt.clf()
-#Plot confusion matrix for the test set
 cf_matrix = confusion_matrix(Y_test, Y_predict_test, labels=[0, 1])
 htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
 plt.title("DT: Confusion Matrix of Test set")
@@ -258,14 +226,6 @@ print("Test predicted.")
 print("Test accuracy: " + str(accuracy_score(Y_test, Y_predict_test)))
 print("Test F1 score: " + str(f1_score(Y_test, Y_predict_test)))
 
-#Plot confusion matrix for the training set
-# cf_matrix = confusion_matrix(Y_train, Y_predict_train, labels=[0, 1])
-# htmp_train = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
-# plt.title("Confusion Matrix of Train set")
-# plt.xlabel("Predicted Label")
-# plt.ylabel("True Label")
-# plt.show()
-# plt.clf()
 #Plot confusion matrix for the test set
 cf_matrix = confusion_matrix(Y_test, Y_predict_test, labels=[0, 1])
 htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
@@ -279,5 +239,89 @@ plt.clf()
 
 Y_probas = RF.predict_proba(X_test)
 skplt.metrics.plot_precision_recall_curve(Y_test, Y_probas, title="RF: Precision-Recall Curve" )
+plt.show()
+plt.clf()
+
+
+#SVC_gossipcop
+print("SVM (gossipcop model) Classifier training and results:")
+svm_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.56, stop_words=stopwords)
+X_train = svm_vectorizer.fit_transform(X_train_origin)
+X_test = svm_vectorizer.transform(X_test_origin) 
+
+print("Vectorized.")
+
+svd = TruncatedSVD(n_components=50, algorithm='arpack', random_state=42)
+print("SVD prepared.")
+X_train = svd.fit_transform(X_train)
+X_test = svd.transform(X_test)
+
+print("SVD finished.")
+
+svm_gossipcop = SVC(C=10, gamma='scale', kernel='rbf', random_state=42 ,probability=True)
+
+svm_gossipcop.fit(X_train, Y_train)
+print("Trained.")
+Y_predict_test = svm_gossipcop.predict(X_test)
+print("Test predicted.")
+
+print("Test accuracy: " + str(accuracy_score(Y_test, Y_predict_test)))
+print("Test F1 score: " + str(f1_score(Y_test, Y_predict_test)))
+
+#Plot confusion matrix for the test set
+cf_matrix = confusion_matrix(Y_test, Y_predict_test, labels=[0, 1])
+htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
+plt.title("SVM (gossipcop model): Confusion Matrix of Test set")
+plt.xlabel("Predicted Label")
+plt.ylabel("True Label")
+
+plt.show()
+
+plt.clf()
+
+Y_probas = svm_gossipcop.predict_proba(X_test)
+skplt.metrics.plot_precision_recall_curve(Y_test, Y_probas, title="SVM (gossipcop model): Precision-Recall Curve" )
+plt.show()
+plt.clf()
+
+
+# LogisticRegression_gossipcop
+print("LR (gossipcop model) Classifier training and results:")
+LR_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.33, stop_words=stopwords)
+X_train = LR_vectorizer.fit_transform(X_train_origin)
+X_test = LR_vectorizer.transform(X_test_origin) 
+
+print("Vectorized.")
+
+svd = TruncatedSVD(n_components=50, algorithm='arpack', random_state=42)
+print("SVD prepared.")
+X_train = svd.fit_transform(X_train)
+X_test = svd.transform(X_test)
+
+print("SVD finished.")
+
+LR_gossipcop = LogisticRegression(C = 100, penalty='l1', solver='liblinear', max_iter=1000, random_state=42)
+
+LR_gossipcop.fit(X_train, Y_train)
+print("Trained.")
+Y_predict_test = LR_gossipcop.predict(X_test)
+print("Test predicted.")
+
+print("Test accuracy: " + str(accuracy_score(Y_test, Y_predict_test)))
+print("Test F1 score: " + str(f1_score(Y_test, Y_predict_test)))
+
+#Plot confusion matrix for the test set
+cf_matrix = confusion_matrix(Y_test, Y_predict_test, labels=[0, 1])
+htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
+plt.title("LR (gossipcop model): Confusion Matrix of Test set")
+plt.xlabel("Predicted Label")
+plt.ylabel("True Label")
+
+plt.show()
+plt.clf()
+
+
+Y_probas = LR_gossipcop.predict_proba(X_test)
+skplt.metrics.plot_precision_recall_curve(Y_test, Y_probas, title="LR (gossipcop model): Precision-Recall Curve" )
 plt.show()
 plt.clf()
