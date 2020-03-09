@@ -33,9 +33,9 @@ print("Test set read.")
 stopwords = set(ENGLISH_STOP_WORDS)
 
 
-svm_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.73, stop_words=stopwords)
-X_train = svm_vectorizer.fit_transform(X_train_origin)
-X_test = svm_vectorizer.transform(X_test_origin) 
+vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.73, stop_words=stopwords)
+X_train = vectorizer.fit_transform(X_train_origin)
+X_test = vectorizer.transform(X_test_origin) 
 
 print("Vectorized.")
 
