@@ -5,3 +5,4 @@ ISOTDataset/*.png
 FakeNewsNetDataset/gossipcop/*.png
 FakeNewsNetDataset/politifact/*.png
 FakeNewsNetDataset/gossipcop/*.pdf
+Pytorch/*.csv
