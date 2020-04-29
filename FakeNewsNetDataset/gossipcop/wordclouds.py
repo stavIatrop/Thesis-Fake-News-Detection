@@ -90,9 +90,9 @@ plt.figure(figsize=(15, 10))
 sb.barplot(y='Words', x = 'Counts', data=common_words_fake)
 plt.show()
 plt.clf()
-sb.barplot(y='Words', x = 'Counts', data=common_words_true)
-plt.show()
-plt.clf()
+# sb.barplot(y='Words', x = 'Counts', data=common_words_true)
+# plt.show()
+# plt.clf()
 
 
 # text_cnt_true = Counter(" ".join(X_true_list).lower().split()).most_common()
@@ -124,7 +124,7 @@ plt.clf()
 # diffs = diffs.most_common(30)
 # diffs_common = pd.DataFrame(diffs, columns=['Words', 'Differences'])
 
-# plt.figure(figsize=(15, 10))
+# plt.figure(figsize=(25, 25))
 
 # sb.barplot(y='Words', x = 'Differences', data=diffs_common)
 # plt.show()
