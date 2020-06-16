@@ -279,8 +279,10 @@ plt.show()
 
 plt.clf()
 
-Y_probas = svm_gossipcop.predict_proba(X_test)
-skplt.metrics.plot_precision_recall_curve(Y_test, Y_probas, title="SVM (gossipcop model): Precision-Recall Curve" )
+Y_probas_train_svm = svm_gossipcop.predict_proba(X_train)
+Y_probas_test_svm = svm_gossipcop.predict_proba(X_test)
+
+skplt.metrics.plot_precision_recall_curve(Y_test, Y_probas_test_svm, title="SVM (gossipcop model): Precision-Recall Curve" )
 plt.show()
 plt.clf()
 
@@ -320,8 +322,188 @@ plt.ylabel("True Label")
 plt.show()
 plt.clf()
 
+Y_probas_train_LR = LR_gossipcop.predict_proba(X_train)
+Y_probas_test_LR = LR_gossipcop.predict_proba(X_test)
 
-Y_probas = LR_gossipcop.predict_proba(X_test)
-skplt.metrics.plot_precision_recall_curve(Y_test, Y_probas, title="LR (gossipcop model): Precision-Recall Curve" )
+skplt.metrics.plot_precision_recall_curve(Y_test, Y_probas_test_LR, title="LR (gossipcop model): Precision-Recall Curve" )
+plt.show()
+plt.clf()
+
+# KNeighborsClassifier Gossipcop
+print("KNN Classifier training and results:")
+knn_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.53, stop_words=stopwords)
+X_train = knn_vectorizer.fit_transform(X_train_origin)
+X_test = knn_vectorizer.transform(X_test_origin)
+
+print("Vectorized.")
+
+svd = TruncatedSVD(n_components=50, algorithm='arpack', random_state=42)
+print("SVD prepared.")
+X_train = svd.fit_transform(X_train)
+X_test = svd.transform(X_test)
+
+print("SVD finished.")
+
+knn_gossipcop = KNeighborsClassifier(n_neighbors=7, weights='distance', metric='euclidean')
+
+knn_gossipcop.fit(X_train, Y_train)
+print("Trained.")
+Y_predict_test = knn_gossipcop.predict(X_test)
+print("Test predicted.")
+
+print("Test accuracy: " + str(accuracy_score(Y_test, Y_predict_test)))
+print("Test F1 score: " + str(f1_score(Y_test, Y_predict_test)))
+
+#Plot confusion matrix for the test set
+cf_matrix = confusion_matrix(Y_test, Y_predict_test, labels=[0, 1])
+htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
+plt.title("KNN (Gossipcop Model): Confusion Matrix of Test set")
+plt.xlabel("Predicted Label")
+plt.ylabel("True Label")
+
+plt.show()
+
+plt.clf()
+
+Y_probas_train_knn = knn_gossipcop.predict_proba(X_train)
+Y_probas_test_knn = knn_gossipcop.predict_proba(X_test)
+
+skplt.metrics.plot_precision_recall_curve(Y_test, Y_probas_test_knn, title="KNN: Precision-Recall Curve" )
+plt.show()
+plt.clf()
+
+
+# DecisionTreeClassifier Gossipcop
+print("DT Classifier training and results:")
+DT_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.77, stop_words=stopwords)
+X_train = DT_vectorizer.fit_transform(X_train_origin)
+X_test = DT_vectorizer.transform(X_test_origin)
+
+print("Vectorized.")
+
+svd = TruncatedSVD(n_components=50, algorithm='arpack', random_state=42)
+print("SVD prepared.")
+X_train = svd.fit_transform(X_train)
+X_test = svd.transform(X_test)
+
+print("SVD finished.")
+
+DT_gossipcop = DecisionTreeClassifier(criterion='entropy', max_depth=7, min_samples_split=420, random_state=42)
+
+DT_gossipcop.fit(X_train, Y_train)
+print("Trained.")
+Y_predict_test = DT_gossipcop.predict(X_test)
+print("Test predicted.")
+
+print("Test accuracy: " + str(accuracy_score(Y_test, Y_predict_test)))
+print("Test F1 score: " + str(f1_score(Y_test, Y_predict_test)))
+
+#Plot confusion matrix for the test set
+cf_matrix = confusion_matrix(Y_test, Y_predict_test, labels=[0, 1])
+htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
+plt.title("DT (Gossipcop Model): Confusion Matrix of Test set")
+plt.xlabel("Predicted Label")
+plt.ylabel("True Label")
+
+plt.show()
+
+plt.clf()
+
+
+Y_probas_train_DT = DT_gossipcop.predict_proba(X_train)
+Y_probas_test_DT = DT_gossipcop.predict_proba(X_test)
+
+skplt.metrics.plot_precision_recall_curve(Y_test, Y_probas_test_DT, title="DT: Precision-Recall Curve" )
+plt.show()
+plt.clf()
+
+
+# RandomForestClassifier Gossipcop
+print("RF Classifier training and results:")
+RF_vectorizer = TfidfVectorizer(sublinear_tf = True, max_df = 0.32, stop_words=stopwords)
+X_train = RF_vectorizer.fit_transform(X_train_origin)
+X_test = RF_vectorizer.transform(X_test_origin)
+
+print("Vectorized.")
+
+svd = TruncatedSVD(n_components=50, algorithm='arpack', random_state=42)
+print("SVD prepared.")
+X_train = svd.fit_transform(X_train)
+X_test = svd.transform(X_test)
+
+print("SVD finished.")
+
+RF_gossipcop = RandomForestClassifier(criterion='gini', max_depth=None, min_samples_split=2, n_estimators=180, random_state=42)
+ 
+RF_gossipcop.fit(X_train, Y_train)
+print("Trained.")
+Y_predict_test = RF_gossipcop.predict(X_test)
+print("Test predicted.")
+
+
+print("Test accuracy: " + str(accuracy_score(Y_test, Y_predict_test)))
+print("Test F1 score: " + str(f1_score(Y_test, Y_predict_test)))
+
+#Plot confusion matrix for the test set
+cf_matrix = confusion_matrix(Y_test, Y_predict_test, labels=[0, 1])
+htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
+plt.title("RF (Gossipcop Model): Confusion Matrix of Test set")
+plt.xlabel("Predicted Label")
+plt.ylabel("True Label")
+
+plt.show()
+plt.clf()
+
+
+Y_probas_train_RF = RF_gossipcop.predict_proba(X_train)
+Y_probas_test_RF = RF_gossipcop.predict_proba(X_test)
+
+skplt.metrics.plot_precision_recall_curve(Y_test, Y_probas_test_RF, title="RF: Precision-Recall Curve" )
+plt.show()
+plt.clf()
+
+
+#Ensemble Classifier
+Y_class1_train_svm = Y_probas_train_svm[np.newaxis, :, 1].T     #each one with shape (m, 1), m=number of training instances
+Y_class1_train_knn = Y_probas_train_knn[np.newaxis, :, 1].T
+Y_class1_train_LR = Y_probas_train_LR[np.newaxis, :, 1].T
+Y_class1_train_DT = Y_probas_train_DT[np.newaxis, :, 1].T
+Y_class1_train_RF = Y_probas_train_RF[np.newaxis, :, 1].T
+
+Y_class1_test_svm = Y_probas_test_svm[np.newaxis, :, 1].T     #each one with shape (n, 1), n=number of test instances
+Y_class1_test_knn = Y_probas_test_knn[np.newaxis, :, 1].T
+Y_class1_test_LR = Y_probas_test_LR[np.newaxis, :, 1].T
+Y_class1_test_DT = Y_probas_test_DT[np.newaxis, :, 1].T
+Y_class1_test_RF = Y_probas_test_RF[np.newaxis, :, 1].T
+
+X_meta_train = np.concatenate(( Y_class1_train_svm, Y_class1_train_knn, Y_class1_train_LR,  Y_class1_train_DT, Y_class1_train_RF), axis=1)  #concatenate horizontally, final shape (m, 5)
+Y_meta_train = Y_train
+
+X_meta_test = np.concatenate(( Y_class1_test_svm, Y_class1_test_knn, Y_class1_test_LR, Y_class1_test_DT, Y_class1_test_RF), axis=1)  #concatenate horizontally, final shape (n, 5)
+Y_meta_test = Y_test
+
+meta_clf = LogisticRegression(random_state=42)
+meta_clf.fit(X_meta_train, Y_meta_train)
+print("Meta-classifier trained.")
+
+Y_predict_meta = meta_clf.predict(X_meta_test)
+print(meta_clf.coef_)
+print("Test accuracy: " + str(accuracy_score(Y_meta_test, Y_predict_meta)))
+print("Test F1 score: " + str(f1_score(Y_meta_test, Y_predict_meta)))
+
+
+#Plot confusion matrix for the test set
+cf_matrix = confusion_matrix(Y_meta_test, Y_predict_meta, labels=[0, 1])
+htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
+plt.title("Meta_Classifier: Confusion Matrix of Test set")
+plt.xlabel("Predicted Label")
+plt.ylabel("True Label")
+
+plt.show()
+plt.clf()
+
+
+Y_meta_probas = meta_clf.predict_proba(X_meta_test)
+skplt.metrics.plot_precision_recall_curve(Y_meta_test, Y_meta_probas, title="Meta_Classifier: Precision-Recall Curve" )
 plt.show()
 plt.clf()
