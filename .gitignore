@@ -6,5 +6,7 @@ FakeNewsNetDataset/gossipcop/*.png
 FakeNewsNetDataset/politifact/*.png
 FakeNewsNetDataset/gossipcop/*.pdf
 Pytorch/*.csv
+Pytorch/politifact/
+Pytorch./gossipcop/
 *.png
 plotting.py
