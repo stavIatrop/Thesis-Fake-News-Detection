@@ -80,7 +80,7 @@ RF = RandomForestClassifier(criterion='entropy', max_depth=21, min_samples_split
 RF.fit(X_train, Y_train)
 Y_predict_RF = RF.predict(X_test)
 
-
+#check for agreement on predictions between the classifiers
 sum = 0
 for i in range(0, len(Y_test)):
 
@@ -90,6 +90,7 @@ for i in range(0, len(Y_test)):
 perc_agree = (sum / len(Y_test)) * 100
 print( " Classifiers agree at about: " +  str(perc_agree))
 
+#voting classifier with soft voting using the weights that came up from the ensemble classifier
 VC = VotingClassifier(estimators=[('svm', svm), ('KNN', KNN), ('LR', LR), ('DT', DT), ('RF', RF)], voting='soft', weights=[5.02384206, 5.03507621, 2.54121808, 1.66982259, 3.26986415])
 VC = VC.fit(X_train, Y_train)
 print("Trained.")
@@ -117,6 +118,41 @@ print("test F1 score: " + str(f1_score(Y_test, Y_predict_test_final)))
 cf_matrix = confusion_matrix(Y_test, Y_predict_test_final, labels=[0, 1])
 htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
 plt.title("Voting Classifier: Confusion Matrix of Test set")
+plt.xlabel("Predicted Label")
+plt.ylabel("True Label")
+
+plt.show()
+
+plt.clf()
+
+#voting classifier with majority voting
+VC_hard = VotingClassifier(estimators=[('svm', svm), ('KNN', KNN), ('LR', LR), ('DT', DT), ('RF', RF)], voting='hard')
+VC_hard = VC_hard.fit(X_train, Y_train)
+print("Trained.")
+
+Y_predict_test = VC_hard._predict(X_test)
+print("test predicted.")
+
+Y_predict_test_final = VC_hard.predict(X_test)
+mislabel = 0
+_all = len(Y_predict_test)
+for i in range(len(Y_predict_test)):
+
+    
+    if Y_predict_test_final[i] != Y_test[i]:
+        if Y_test[i] in Y_predict_test[i]:
+            mislabel = mislabel + 1 
+
+percentage = mislabel / _all
+print("Percentage of mislabeled samples that one or more classifier had predicted right on test set:" + 
+        str(percentage))
+
+print("test accuracy: " + str(accuracy_score(Y_test, Y_predict_test_final)))
+print("test F1 score: " + str(f1_score(Y_test, Y_predict_test_final)))
+
+cf_matrix = confusion_matrix(Y_test, Y_predict_test_final, labels=[0, 1])
+htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
+plt.title("Voting Classifier with majority voting: Confusion Matrix of Test set")
 plt.xlabel("Predicted Label")
 plt.ylabel("True Label")
 

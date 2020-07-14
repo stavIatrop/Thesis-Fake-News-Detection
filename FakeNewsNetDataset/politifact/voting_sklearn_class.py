@@ -123,3 +123,39 @@ plt.ylabel("True Label")
 plt.show()
 
 plt.clf()
+
+
+
+VC_hard = VotingClassifier(estimators=[('svm', svm), ('KNN', KNN), ('LR', LR), ('DT', DT), ('RF', RF)], voting='hard')
+VC_hard = VC_hard.fit(X_train, Y_train)
+print("Trained.")
+
+Y_predict_test = VC_hard._predict(X_test)
+print("test predicted.")
+
+Y_predict_test_final = VC_hard.predict(X_test)
+mislabel = 0
+_all = len(Y_predict_test)
+for i in range(len(Y_predict_test)):
+
+    
+    if Y_predict_test_final[i] != Y_test[i]:
+        if Y_test[i] in Y_predict_test[i]:
+            mislabel = mislabel + 1 
+
+percentage = mislabel / _all
+print("Percentage of mislabeled samples that one or more classifier had predicted right on test set:" + 
+        str(percentage))
+
+print("test accuracy: " + str(accuracy_score(Y_test, Y_predict_test_final)))
+print("test F1 score: " + str(f1_score(Y_test, Y_predict_test_final)))
+
+cf_matrix = confusion_matrix(Y_test, Y_predict_test_final, labels=[0, 1])
+htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
+plt.title("Voting Classifier with majority voting: Confusion Matrix of Test set")
+plt.xlabel("Predicted Label")
+plt.ylabel("True Label")
+
+plt.show()
+
+plt.clf()
