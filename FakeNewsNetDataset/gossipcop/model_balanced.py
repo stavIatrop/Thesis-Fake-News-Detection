@@ -17,6 +17,7 @@ import numpy as np
 import seaborn as sns
 from sklearn.metrics import precision_recall_curve
 import scikitplot as skplt
+from sklearn.metrics import classification_report
 
 #Load train data
 X_train_origin = pd.read_csv("train_gossipcop_balanced.csv", ",")
@@ -58,14 +59,10 @@ print("Test predicted.")
 print("Test accuracy: " + str(accuracy_score(Y_test, Y_predict_test)))
 print("Test F1 score: " + str(f1_score(Y_test, Y_predict_test)))
 
-#Plot confusion matrix for the test set
-# cf_matrix = confusion_matrix(Y_train, Y_predict_train, labels=[0, 1])
-# htmp_train = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
-# plt.title("Confusion Matrix of Train set")
-# plt.xlabel("Predicted Label")
-# plt.ylabel("True Label")
-# plt.show()
-# plt.clf()
+#Classification report for each class
+print(classification_report(Y_test, Y_predict_test, target_names=['class 0', 'class 1']))
+
+
 #Plot confusion matrix for the test set
 cf_matrix = confusion_matrix(Y_test, Y_predict_test, labels=[0, 1])
 htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
@@ -109,14 +106,9 @@ print("Test predicted.")
 print("Test accuracy: " + str(accuracy_score(Y_test, Y_predict_test)))
 print("Test F1 score: " + str(f1_score(Y_test, Y_predict_test)))
 
-#Plot confusion matrix for the test set
-# cf_matrix = confusion_matrix(Y_train, Y_predict_train, labels=[0, 1])
-# htmp_train = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
-# plt.title("Confusion Matrix of Train set")
-# plt.xlabel("Predicted Label")
-# plt.ylabel("True Label")
-# plt.show()
-# plt.clf()
+#Classification report for each class
+print(classification_report(Y_test, Y_predict_test, target_names=['class 0', 'class 1']))
+
 #Plot confusion matrix for the test set
 cf_matrix = confusion_matrix(Y_test, Y_predict_test, labels=[0, 1])
 htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
@@ -161,14 +153,10 @@ print("Test predicted.")
 print("Test accuracy: " + str(accuracy_score(Y_test, Y_predict_test)))
 print("Test F1 score: " + str(f1_score(Y_test, Y_predict_test)))
 
-#Plot confusion matrix for the test set
-# cf_matrix = confusion_matrix(Y_train, Y_predict_train, labels=[0, 1])
-# htmp_train = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
-# plt.title("Confusion Matrix of Train set")
-# plt.xlabel("Predicted Label")
-# plt.ylabel("True Label")
-# plt.show()
-# plt.clf()
+#Classification report for each class
+print(classification_report(Y_test, Y_predict_test, target_names=['class 0', 'class 1']))
+
+
 #Plot confusion matrix for the test set
 cf_matrix = confusion_matrix(Y_test, Y_predict_test, labels=[0, 1])
 htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
@@ -214,14 +202,10 @@ print("Test predicted.")
 print("Test accuracy: " + str(accuracy_score(Y_test, Y_predict_test)))
 print("Test F1 score: " + str(f1_score(Y_test, Y_predict_test)))
 
-#Plot confusion matrix for the test set
-# cf_matrix = confusion_matrix(Y_train, Y_predict_train, labels=[0, 1])
-# htmp_train = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
-# plt.title("Confusion Matrix of Train set")
-# plt.xlabel("Predicted Label")
-# plt.ylabel("True Label")
-# plt.show()
-# plt.clf()
+#Classification report for each class
+print(classification_report(Y_test, Y_predict_test, target_names=['class 0', 'class 1']))
+
+
 #Plot confusion matrix for the test set
 cf_matrix = confusion_matrix(Y_test, Y_predict_test, labels=[0, 1])
 htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
@@ -266,14 +250,10 @@ print("Test predicted.")
 print("Test accuracy: " + str(accuracy_score(Y_test, Y_predict_test)))
 print("Test F1 score: " + str(f1_score(Y_test, Y_predict_test)))
 
-#Plot confusion matrix for the training set
-# cf_matrix = confusion_matrix(Y_train, Y_predict_train, labels=[0, 1])
-# htmp_train = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
-# plt.title("Confusion Matrix of Train set")
-# plt.xlabel("Predicted Label")
-# plt.ylabel("True Label")
-# plt.show()
-# plt.clf()
+#Classification report for each class
+print(classification_report(Y_test, Y_predict_test, target_names=['class 0', 'class 1']))
+
+
 #Plot confusion matrix for the test set
 cf_matrix = confusion_matrix(Y_test, Y_predict_test, labels=[0, 1])
 htmp_test = sns.heatmap(cf_matrix, cmap='Reds', annot=True, fmt='g')
